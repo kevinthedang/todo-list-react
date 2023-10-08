@@ -5,10 +5,27 @@ export default function App() {
   const [newItem, setNewItem] = useState("")
   // setNewItem("stuff") <-- infinite loop of rerender
 
+  const [todos, setTodos] = useState([])
+
+  
+  function handleSubmit(e) {
+    e.preventDefault() // prevent page from refreshing / rerendering
+
+    setTodos((currentTodos) => {
+      return setTodos([...currentTodos, 
+        { 
+          id: crypto.randomUUID(), 
+          title: newItem, 
+          completed: false 
+        }
+      ])
+    })  
+  }
+
   return (
     // fragment wrapper
     <>
-      <form className="new-item-form">
+      <form onSubmit={handleSubmit} className="new-item-form">
         <div className="form-row">
           <label htmlFor="item">New Item</label>
           <input 
