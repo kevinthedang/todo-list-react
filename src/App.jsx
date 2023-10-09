@@ -1,11 +1,22 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import "./styles.css"
 import { NewTodoForm } from "./NewTodoForm"
 import { TodoList } from "./TodoList"
 
 export default function App() {
   // setNewItem("stuff") <-- infinite loop of rerender
-  const [todos, setTodos] = useState([])
+  const [todos, setTodos] = useState(() => {
+    const localValue = localStorage.getItem("ITEM")
+    if (localValue == null) return []
+
+    return JSON.parse(localValue)
+  })
+
+  // Data persistence, cannot use them conditionally... Hooks are not conditional (put them at the top)
+  // order is usually: Hooks -> functions -> jsx
+  useEffect(() => {
+    localStorage.setItem("ITEM", JSON.stringify(todos))
+  }, [todos])
 
   function addTodo(title) {
     setTodos((currentTodos) => {
