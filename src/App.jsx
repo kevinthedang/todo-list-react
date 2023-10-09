@@ -36,6 +36,12 @@ export default function App() {
     })
   }
 
+  function deleteTodos(id) {
+    setTodos(currentTodos => {
+      return currentTodos.filter(todo => todo.id !== id)
+    })
+  }
+
   return (
     // fragment wrapper
     <>
@@ -53,6 +59,8 @@ export default function App() {
       </form>
       <h1 className="header">Todo List</h1>
       <ul className="list">
+        {todos.length === 0 && "No Todos"}
+        {/* Above is "short circuiting" */}
         {todos.map(todo => {
             return (
               <li key={todo.id}>
@@ -61,7 +69,8 @@ export default function App() {
                   onChange={e => toggleTodo(todo.id, e.target.checked)}/>
                   {todo.title}
                 </label>
-                <button className="btn btn-danger">Delete</button>
+                <button onClick={() => deleteTodos(todo.id)} className="btn btn-danger">Delete</button>
+                {/* we want () => so we can call it as a function rather than just getting the result */}
               </li>
             )
         })}
