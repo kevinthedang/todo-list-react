@@ -1,26 +1,21 @@
 import { useState } from "react"
 import "./styles.css"
+import { NewTodoForm } from "./NewTodoForm"
 
 export default function App() {
-  const [newItem, setNewItem] = useState("")
   // setNewItem("stuff") <-- infinite loop of rerender
   const [todos, setTodos] = useState([])
 
-  
-  function handleSubmit(e) {
-    e.preventDefault() // prevent page from refreshing / rerendering
-
+  function addTodo(title) {
     setTodos((currentTodos) => {
       return [...currentTodos, 
         { 
           id: crypto.randomUUID(), 
-          title: newItem, 
+          title, 
           completed: false 
         }
       ]
     })  
-
-    setNewItem("")
   }
 
   function toggleTodo(id, completed) {
@@ -45,18 +40,8 @@ export default function App() {
   return (
     // fragment wrapper
     <>
-      <form onSubmit={handleSubmit} className="new-item-form">
-        <div className="form-row">
-          <label htmlFor="item">New Item</label>
-          <input 
-            value={newItem} 
-            onChange={e => setNewItem(e.target.value)} 
-            type="text" 
-            id="item" />
-          {/* onChange was cahnged for every key, value is the input value set */}
-        </div>
-        <button className="btn">Add</button>
-      </form>
+      <NewTodoForm onSubmit={addTodo} />
+      {/* Passing of a function via a property above */}
       <h1 className="header">Todo List</h1>
       <ul className="list">
         {todos.length === 0 && "No Todos"}
